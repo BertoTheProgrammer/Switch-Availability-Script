@@ -52,7 +52,7 @@ def check_inventory():
                 quantity_text = cols[6].inner_text().strip()
                 try:
                     quantity = int(quantity_text)
-                    if quantity == 1:
+                    if quantity > 1:
                         print(f"🔔 {product}: {quantity}")
                         notify(product, quantity)
                         found = True
