@@ -20,19 +20,20 @@ def notify(product, quantity):
 
 def check_inventory():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)  # <- headless=False while testing
         page = browser.new_page()
         page.goto("https://www.switchsniper.com/current-inventory")
 
-        page.wait_for_selector("select")
+        # Wait until both selects are loaded
+        page.wait_for_selector('select.hidden.md\\:block', timeout=15000)
 
-        # Select Arizona using its value attribute
-        page.select_option("select", value="AZ")
+        # Select Arizona from State selector
+        state_selector = page.locator('select.hidden.md\\:block')
+        state_selector.select_option(value="AZ")
+        print("✅ Arizona selected.")
 
-        # Optional: Wait for page to update (if it's dynamic)
+        # Optional: give the page time to refresh inventory
         page.wait_for_timeout(3000)
-
-        print("Arizona selected!")
 
         try:
             page.wait_for_selector("table tbody tr", timeout=10000)
@@ -66,3 +67,4 @@ def check_inventory():
 
 if __name__ == "__main__":
     check_inventory()
+
