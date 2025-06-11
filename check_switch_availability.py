@@ -20,7 +20,7 @@ def notify(product, quantity):
 
 def check_inventory():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)  # <- headless=False while testing
+        browser = p.chromium.launch(headless=True) 
         page = browser.new_page()
         page.goto("https://www.switchsniper.com/current-inventory")
 
